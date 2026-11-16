@@ -1,0 +1,28 @@
+# A configuration file that sets every key.
+
+[template]
+path = "badge.svg"
+placeholder_open = "${"
+placeholder_close = "}"
+
+[data]
+path = "people.csv"
+format = "csv"
+csv_delimiter = ";"
+
+[output]
+dir = "out"
+name = "${id}.pdf"
+merge = "all.pdf"
+force = true
+
+[render]
+jobs = 4
+font_dirs = ["fonts"]
+engine = "inkscape"
+inkscape = "/usr/bin/inkscape"
+format = "raster"
+dpi = 150
+
+[log]
+level = "debug"

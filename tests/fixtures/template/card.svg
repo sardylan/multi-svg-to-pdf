@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="87mm" height="57mm" viewBox="0 0 87 57">
+  <rect width="87" height="57" fill="#dcdcec"/>
+  <rect y="40" width="87" height="17" fill="#00344f"/>
+  <text x="82" y="16" font-family="sans-serif" font-size="6" text-anchor="end" fill="#00344f">{{call_upper}}</text>
+  <text x="82" y="23" font-family="sans-serif" font-size="6" text-anchor="end" fill="#00344f">{{call_lower}}</text>
+  <text x="5" y="48" font-family="sans-serif" font-size="5" fill="#dcdcec">{{name}}</text>
+  <text x="5" y="54" font-family="sans-serif" font-size="5" fill="#dcdcec">{{surname}}</text>
+</svg>

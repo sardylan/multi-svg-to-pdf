@@ -1,0 +1,4 @@
+[
+  { "name": "ROSSI", "surname": "OTTAVIO", "call_upper": "N0CALL", "age": 42, "member": true },
+  { "name": "BIANCHI", "surname": "LAURA", "call_upper": null }
+]
