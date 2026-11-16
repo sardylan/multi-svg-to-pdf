@@ -30,7 +30,9 @@ and renders each result to PDF.
 - `src/output/`: existing-file check and writes; `merge.rs` merges PDFs with lopdf.
 - `tests/fixtures/`: sample inputs loaded with `include_str!`.
 - `.github/workflows/build.yml`: CI. Format, clippy and tests on Linux; release binaries for
-  Linux amd64 (static, musl) and Windows x64, uploaded as workflow artifacts.
+  Linux amd64 (static, musl) and Windows x64, uploaded as workflow artifacts. Pushing a tag
+  `vX.Y.Z` publishes a GitHub release with the archives and `SHA256SUMS`; the tag must match
+  `version` in Cargo.toml, so bump the version first.
 
 ## Commands
 
