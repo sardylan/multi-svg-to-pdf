@@ -19,6 +19,9 @@ const STYLES: Styles = Styles::styled()
     .valid(AnsiColor::Green.on_default())
     .invalid(AnsiColor::Red.on_default());
 
+/// Separator of a list of paths in one value, as in PATH. Windows paths contain ':'.
+const PATH_LIST_DELIMITER: char = if cfg!(windows) { ';' } else { ':' };
+
 const H_CONFIG: &str = "⚙️  Configuration";
 const H_TEMPLATE: &str = "🖼️  Template";
 const H_DATA: &str = "📊 Data";
@@ -138,9 +141,9 @@ pub(crate) struct Cli {
 
     /// Extra directory to load fonts from; may be repeated.
     ///
-    /// System fonts are always loaded. In the environment variable, separate directories
-    /// with ':'.
-    #[arg(long = "font-dir", env = "MULTI_SVG_TO_PDF_RENDER_FONT_DIRS", value_delimiter = ':', help_heading = H_RENDER)]
+    /// System fonts are always loaded. Several directories in one value are separated like
+    /// in PATH: ':' on Linux and macOS, ';' on Windows.
+    #[arg(long = "font-dir", env = "MULTI_SVG_TO_PDF_RENDER_FONT_DIRS", value_delimiter = PATH_LIST_DELIMITER, help_heading = H_RENDER)]
     pub(crate) font_dirs: Vec<PathBuf>,
 
     /// Program that converts SVG to PDF: native or inkscape.

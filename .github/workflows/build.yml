@@ -1,0 +1,92 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # Builds pin an exact Rust version (doc/rust-guidelines.md §8.2). RUSTUP_TOOLCHAIN overrides
+  # the `stable` channel of rust-toolchain.toml. Raise it deliberately, after clippy and tests
+  # pass on the new version.
+  RUST_VERSION: "1.100.0"
+  RUSTUP_TOOLCHAIN: "1.100.0"
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: format, lint, test
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install Rust ${{ env.RUST_VERSION }}
+        run: rustup toolchain install "$RUST_VERSION" --profile minimal --component rustfmt,clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Format
+        run: cargo fmt --check
+
+      - name: Clippy
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: Test
+        run: cargo test
+
+  build:
+    name: build ${{ matrix.name }}
+    needs: check
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux-amd64
+            os: ubuntu-24.04
+            # musl: one static binary that runs on any x86-64 Linux distribution.
+            target: x86_64-unknown-linux-musl
+            binary: multi-svg-to-pdf
+          - name: windows-x64
+            os: windows-2022
+            target: x86_64-pc-windows-msvc
+            binary: multi-svg-to-pdf.exe
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install Rust ${{ env.RUST_VERSION }} for ${{ matrix.target }}
+        shell: bash
+        run: rustup toolchain install "$RUST_VERSION" --profile minimal --target "${{ matrix.target }}"
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.target }}
+
+      - name: Build
+        shell: bash
+        run: cargo build --release --locked --target "${{ matrix.target }}"
+
+      - name: Smoke test
+        shell: bash
+        run: |
+          bin="target/${{ matrix.target }}/release/${{ matrix.binary }}"
+          "$bin" --version
+          "$bin" --help > /dev/null
+
+      - name: Package
+        shell: bash
+        run: |
+          dir="multi-svg-to-pdf-${{ matrix.name }}"
+          mkdir "$dir"
+          cp "target/${{ matrix.target }}/release/${{ matrix.binary }}" README.md LICENSE.md "$dir/"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: multi-svg-to-pdf-${{ matrix.name }}
+          path: multi-svg-to-pdf-${{ matrix.name }}
+          if-no-files-found: error

@@ -29,6 +29,8 @@ and renders each result to PDF.
   stdin/stdout, PDF or PNG export), `raster.rs` (PNG wrapped into a PDF page).
 - `src/output/`: existing-file check and writes; `merge.rs` merges PDFs with lopdf.
 - `tests/fixtures/`: sample inputs loaded with `include_str!`.
+- `.github/workflows/build.yml`: CI. Format, clippy and tests on Linux; release binaries for
+  Linux amd64 (static, musl) and Windows x64, uploaded as workflow artifacts.
 
 ## Commands
 
@@ -57,4 +59,7 @@ cargo fmt
   made in Inkscape need `--engine inkscape`.
 - Inkscape instances in parallel abort on D-Bus; keep `DBUS_SESSION_BUS_ADDRESS=disabled:` on
   the child process.
-- Toolchain: latest stable (`rust-toolchain.toml`); only CI/container builds pin a version.
+- Toolchain: latest stable (`rust-toolchain.toml`); only CI/container builds pin a version
+  (`RUST_VERSION` / `RUSTUP_TOOLCHAIN` in the workflow). Raise the pin deliberately.
+- Tests use Unix-only APIs (`std::os::unix`), so they run on Linux only; Windows is built, not
+  tested. Code outside tests must stay portable (e.g. path lists use ';' on Windows).

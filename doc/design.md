@@ -87,7 +87,7 @@ force = false                # -f/--force
 
 [render]
 jobs = 0                     # -j/--jobs, at most 1024
-font_dirs = []               # --font-dir (repeatable; ':'-separated in the environment)
+font_dirs = []               # --font-dir (repeatable; ':'-separated, ';' on Windows)
 engine = "native"            # -e/--engine: native, inkscape
 inkscape = "inkscape"        # --inkscape: the Inkscape program
 format = "vector"            # --format: vector, raster

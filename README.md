@@ -27,7 +27,12 @@ template for every row and writes one PDF per row, or one multi-page PDF with al
 
 ## Install
 
-Requires a recent stable [Rust](https://www.rust-lang.org/tools/install) toolchain.
+Ready-made binaries for Linux amd64 (static, runs on any distribution) and Windows x64 are built
+by [GitHub Actions](https://github.com/sardylan/multi-svg-to-pdf/actions/workflows/build.yml):
+open the latest successful run and download the artifact for your system.
+
+To build from source you need a recent stable [Rust](https://www.rust-lang.org/tools/install)
+toolchain:
 
 ```bash
 git clone https://github.com/sardylan/multi-svg-to-pdf.git
